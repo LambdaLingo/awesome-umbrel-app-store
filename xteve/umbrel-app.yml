@@ -1,48 +1,27 @@
 manifestVersion: 1
-id: "xteve"
+id: "xteve" # This ID must match the one used in docker-compose.yml
 name: "xTeVe"
 tagline: "M3U Proxy for Plex, Emby & Jellyfin"
 category: "Media"
-version: "2.2.0" # This is the version of the xTeVe software itself, not the Docker image.
+version: "2.2.0"
 
-# The description is a multi-line entry using the '|' character.
-# It provides a clear overview for the end-user in the app store.
 description: |
   xTeVe is an M3U proxy server for DVR/Live TV applications like Plex, Emby, or Jellyfin.
   It allows you to manage your IPTV streams and Electronic Program Guide (EPG) data in one central place.
-  This app uses the recommended 'dnsforge/xteve' Docker image, which includes helpful tools for EPG management.
   
-  After installation, access the xTeVe web UI on port 34400 to begin your configuration.
+  This app uses the 'dnsforge/xteve' Docker image and runs as a community app.
+  After installation, access the xTeVe web UI to begin your configuration.
 
 developer: "xTeVe Project & DNSForge"
 website: "https://github.com/xteve-project/xTeVe"
 repo: "https://github.com/xteve-project/xTeVe"
 support: "https://github.com/xteve-project/xTeVe/issues"
 
-# --- Docker Configuration ---
-# Specifies the Docker image to be used and the port for the web UI.
-image: "dnsforge/xteve:latest"
-port: 34400 # The default web interface port for xTeVe.
-path: "/" # The application is served at the root of its port.
+# --- Umbrel UI Configuration ---
+# The port Umbrel should open to access your app's UI.
+# This MUST match the APP_PORT in the 'app_proxy' service in docker-compose.yml
+port: 34400
+path: "" # The app is served at the root of the domain
 
-# --- Data Persistence ---
-# This section ensures that user data and configuration are saved
-# across app restarts and updates. It maps directories inside the
-# container to directories on the Umbrel host's storage.
-volumes:
-  # Path for storing xTeVe's main configuration files.
-  /config: "/data/config"
-  # Path for storing temporary files, such as EPG caches or stream buffers.
-  /tmp: "/data/temp"
-
-# --- Environment Variables ---
-# These variables are passed to the Docker container on startup.
-# They are crucial for setting permissions and localization.
-env:
-  # Set the User ID and Group ID to prevent permission issues with the volumes.
-  # '1000' is the standard 'umbrel' user.
-  PUID: "1000"
-  PGID: "1000"
-  # Set the timezone to ensure EPG data is displayed correctly.
-  # The user can override this in their .env file if needed.
-  TZ: "Etc/UTC"
+# We no longer define image, volumes, or env here.
+# All runtime configuration is now handled by docker-compose.yml.
