@@ -1,30 +1,21 @@
 version: "3.7"
 
 services:
-  # This is a mandatory proxy service required by Umbrel
-  # to route traffic to your app.
   app_proxy:
-    image: getumbrel/app-proxy:latest
     environment:
-      # The format is: <app-id>_<docker-service-name>_1
-      # IMPORTANT: "xteve" must match the 'id' in your umbrel-app.yml
+      # The format here is: <app-id>_<docker-service-name>_1
       APP_HOST: xteve_server_1
-      APP_PORT: 34400 # The internal port of your app's main service
-    depends_on:
-      - server
+      APP_PORT: 34400
 
-  # This is your actual application service.
   server:
     image: dnsforge/xteve:latest
-    user: "1000:1000" # Run as the standard Umbrel user to prevent permission issues
+    user: "1000:1000"
     init: true
-    restart: on-failure # A good practice to add
-    volumes:
-      # Maps host directories (relative to Umbrel's app-data folder) to container paths
-      # These will be something like: /umbrel/app-data/xteve/config -> /config
-      - ./config:/config
-      - ./temp:/tmp
+    restart: on-failure
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
+    volumes:
+      - ./config:/config
+      - ./temp:/tmp
