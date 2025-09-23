@@ -5,7 +5,7 @@ services:
   app_proxy:
     environment:
       # The format here is: <app-id>_<docker-service-name>_1
-      APP_HOST: Awesome-hello-world_server_1
+      APP_HOST: awesome-hello-world_server_1
       APP_PORT: 3000
     
   server:
