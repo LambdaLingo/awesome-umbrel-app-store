@@ -8,8 +8,5 @@ services:
     
   server:
     image: dnsforge/xteve:latest
-    # REMOVED the "user: '1000:1000'" line. This is the fix.
-    # The container will run as root by default, which has permission
-    # to write to the volumes created by Umbrel (which are also owned by root).
-    # The PUID/PGID env vars will handle permissions internally within the container.
+    user: "1000:1000"
     init: true
