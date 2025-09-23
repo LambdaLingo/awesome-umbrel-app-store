@@ -13,10 +13,3 @@ services:
     # to write to the volumes created by Umbrel (which are also owned by root).
     # The PUID/PGID env vars will handle permissions internally within the container.
     init: true
-    volumes:
-      - ./config:/config
-      - ./temp:/tmp
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
