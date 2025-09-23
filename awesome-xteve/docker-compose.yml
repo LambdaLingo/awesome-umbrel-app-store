@@ -8,5 +8,15 @@ services:
     
   server:
     image: dnsforge/xteve:latest
-    user: "1000:1000"
     init: true
+    # We are no longer using "user: 1000:1000" and will let the container run as root
+    # to manage permissions, as this seems to be the intended way.
+    volumes:
+      # CRITICAL FIX: The xTeVe image expects its configuration volume at this specific path.
+      # We are mapping a host folder named 'conf' to the required container path '/home/xteve/conf'.
+      - ./conf:/home/xteve/conf
+    environment:
+      # These variables are still useful for internal file ownership within the container.
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
