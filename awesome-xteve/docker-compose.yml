@@ -1,32 +1,18 @@
 version: "3.7"
 
 services:
-  # This is the mandatory proxy service required by Umbrel.
-  # It routes traffic from the Umbrel dashboard to your app.
-  app_proxy:
-    # THIS IS THE CRITICAL FIX: The proxy service itself needs an image to run.
-    image: getumbrel/app-proxy:latest
-    restart: always # Ensures the proxy is always running.
-    volumes:
-      # This volume is required by the app-proxy to function correctly.
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    environment:
-      # The format is: <app-id>_<docker-service-name>_1
-      # 'xteve' must match the 'id' in your umbrel-app.yml.
-      APP_HOST: awesome-xteve_server_1
-      APP_PORT: 34400 # The internal port of your app's main service.
-    # This ensures the proxy only starts after the main app is ready.
-    depends_on:
-      - server
 
-  # This is your actual application service.
+  app_proxy:
+    environment:
+      # The format here is: <app-id>_<docker-service-name>_1
+      APP_HOST: awesome-xteve_server_1
+      APP_PORT: 34400
+    
   server:
-    image: dnsforge/xteve:2.2.0 # Pinned to a specific, stable version.
-    user: "1000:1000" # Run as the standard Umbrel user to prevent permission issues.
+    image: dnsforge/xteve:latest
+    user: "1000:1000"
     init: true
-    restart: always # Recommended for long-running services.
     volumes:
-      # Maps host directories (under /umbrel/app-data/xteve/) to container paths.
       - ./config:/config
       - ./temp:/tmp
     environment:
